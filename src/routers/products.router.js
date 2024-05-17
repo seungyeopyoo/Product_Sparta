@@ -11,18 +11,19 @@ const router = express.Router();
 4. `value` 데이터는 **최대 50글자 이하**여야한다.
 5. 유효성 검사에 실패했을 때, 에러가 발생해야한다.
  */
-const createdProductSchema = joi.object({
-    value: joi.string().min(1).max(50).required(),
-});
+// const createdProductSchema = joi.object({
+//     value: joi.string().min(1).max(50).required(),
+// });
 
 /** 상품생성 API */
 router.post('/products', async (req, res, next) => {
     try {
-        // 클라이언트로부터 받아온 value 데이터를 가져온다
+        //     // 클라이언트로부터 받아온 value 데이터를 가져온다
 
-        const validation = await createdProductSchema.validateAsync(req.body);
+        //     const validation = await ProductSchema.validateAsync(req.body);
 
-        const { name, description, manager, password } = validation;
+        //     const { name, description, manager, password } = validation;
+        const { name, description, manager, password } = req.body;
 
         // 만약, 클라이언트가 value 데이터를 전달하지 않았을때 클라이언트에게 에러메세지를 전달한다.
         if (!name || !description || !manager || !password) {
@@ -53,7 +54,7 @@ router.get('/products', async (req, res, next) => {
 });
 
 /** 상품 상세 조회 API */
-router.get('/products/:Id', checkProductId, async (req, res, next) => {
+router.get('/products/:Id', async (req, res, next) => {
     // 요청 파라미터에서 상품 ID를 추출합니다.
     const product = await Product.findOne({
         _id: req.params.Id,
@@ -72,7 +73,7 @@ router.get('/products/:Id', checkProductId, async (req, res, next) => {
 
 
 /*** 상품 수정 API */
-router.put('/products/:id', checkProductId, async (req, res, next) => {
+router.put('/products/:id', async (req, res, next) => {
     // 요청 바디에서 필요한 상품 정보를 추출합니다.
     const { name, description, manager, status, password } = req.body;
 
